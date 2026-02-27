@@ -98,7 +98,7 @@ class Calculadora(tkinter.Tk):
         if not hasattr(self, 'frame_historico'):
             # Cria o frame
             self.frame_historico = tkinter.Frame(self, bg="lightgray", width=200)
-            self.frame_historico.grid(row=1, column=0, rowspan=5, padx=5, pady=5, sticky="nsew")
+            
             
             # Cria a listbox dentro do frame
             self.listbox = tkinter.Listbox(self.frame_historico, font=("Arial", 10))
@@ -114,20 +114,61 @@ class Calculadora(tkinter.Tk):
             )
             botao_limpar.pack(fill=tkinter.X, padx=5, pady=5)
             
+            botao_fechar = tkinter.Button(
+                self.frame_historico,
+                text="Fechar",
+                command=self.animar_reverso,
+                bg="orange",
+                fg="white"
+                )
+            botao_fechar.pack(fill=tkinter.X, padx=5, pady=5)
+            
             # Preenche com dados iniciais
             self.mostrar_historico()
+            self.animar()
+            
         else:
             # Se já existe, toggle (mostra/esconde)
             if self.frame_historico.winfo_viewable():
-                self.frame_historico.grid_remove()
+                self.animar_reverso()
             else:
-                self.frame_historico.grid()
+                self.frame_historico.place(x=0, y=50, width=250, height=450)
                 self.mostrar_historico()
+                self.animar()
     
     def limpar_historico(self):
         self.banco.limpar_historico()
         self.mostrar_historico()
 
+    def animar(self):
+        # Move o frame um pouco
+        posicao_atual = 0
+        posicao_final = 60
+        
+        def mover():
+            nonlocal posicao_atual
+            
+            if posicao_atual < posicao_final:
+                posicao_atual += 5
+                self.frame_historico.place(x=posicao_atual, y=50, width=250, height=450)
+                self.after(20, mover)
+        mover()
+                
+    def animar_reverso(self):
+        posicao_atual = 60
+        posicao_final = 0
+        
+        def mover():
+            nonlocal posicao_atual
+            
+            if posicao_atual > posicao_final:
+                posicao_atual -= 5
+                self.frame_historico.place(x=posicao_atual, y=50, width=250, height=450)
+                self.after(20, mover)
+            else:
+                self.frame_historico.place_forget()
+            
+        mover()
+        
+    
 
-janela1 = Calculadora()
-janela1.mainloop()
