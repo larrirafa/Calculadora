@@ -3,6 +3,7 @@ import config
 from interface import Interface
 from operacoes import Operacoes
 from banco_dados import BancoDados
+from exportar import Exportador
 
 class Calculadora(tkinter.Tk):
     def __init__(self):
@@ -25,6 +26,7 @@ class Calculadora(tkinter.Tk):
             self.grid_columnconfigure(i, weight=1)
 
         self.referenciado_entry = tkinter.StringVar()
+        self.exportador = Exportador(self.banco)
         
         # Criar interface
         self.interface = Interface(self, {
@@ -153,6 +155,15 @@ class Calculadora(tkinter.Tk):
             self.mostrar_historico()
             self.animar()
             
+            botao_exportar = tkinter.Button(
+            self.frame_historico,
+            text="Exportar",
+            command=self.abrir_menu_exportar,
+            bg="green",
+            fg="white"
+            )
+            botao_exportar.pack(fill=tkinter.X, padx=5, pady=5)
+            
         else:
             # Se já existe, toggle (mostra/esconde)
             if self.frame_historico.winfo_viewable():
@@ -214,3 +225,35 @@ class Calculadora(tkinter.Tk):
     def atalho_limpar(self):
         """Atalho Delete para limpar"""
         self.caracteres_especiais("C")
+        
+    def abrir_menu_exportar(self):
+        """Abre menu pra escolher formato"""
+        from tkinter import filedialog, messagebox
+        
+        opcoes = {
+            "CSV (.csv)": self.exportador.exportar_csv,
+            "Texto (.txt)": self.exportador.exportar_txt,
+            "PDF (.pdf)": self.exportador.exportar_pdf
+        }
+        
+        # Abre diálogo pra escolher formato
+        formato = filedialog.asksaveasfilename(
+            defaultextension=".csv",
+            filetypes=[("CSV", "*.csv"), ("Texto", "*.txt"), ("PDF", "*.pdf")]
+        )
+        
+        if formato:
+            try:
+                if formato.endswith('.csv'):
+                    self.exportador.exportar_csv(formato)
+                elif formato.endswith('.txt'):
+                    self.exportador.exportar_txt(formato)
+                elif formato.endswith('.pdf'):
+                    sucesso = self.exportador.exportar_pdf(formato)
+                    if not sucesso:
+                        messagebox.showerror("Erro", "Instale reportlab: pip install reportlab")
+                        return
+                
+                messagebox.showinfo("Sucesso", f"Exportado para {formato}")
+            except Exception as erro:
+                messagebox.showerror("Erro", f"Erro ao exportar: {erro}")
