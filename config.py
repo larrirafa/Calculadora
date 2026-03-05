@@ -34,3 +34,23 @@ PADDING = 5
 
 # Fonte da entrada
 FONTE_ENTRADA = ("Arial", 24, "bold")
+
+
+# Temas
+TEMA_CLARO = {
+    "bg_janela": "white",
+    "bg_entrada": "white",
+    "fg_entrada": "black",
+    "bg_botao": "lightgray",
+    "fg_botao": "black",
+    "bg_frame": "lightgray"
+}
+
+TEMA_ESCURO = {
+    "bg_janela": "#1e1e1e",
+    "bg_entrada": "#2d2d2d",
+    "fg_entrada": "white",
+    "bg_botao": "#3d3d3d",
+    "fg_botao": "white",
+    "bg_frame": "#2d2d2d"
+}

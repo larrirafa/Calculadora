@@ -10,9 +10,14 @@ class Calculadora(tkinter.Tk):
         self.title(config.TITULO)
         self.geometry(f'{config.LARGURA}x{config.ALTURA}+{config.POS_X}+{config.POS_Y}')
         
+        self.tema_atual = "claro"  # Começa em modo claro
+        self.cores = config.TEMA_CLARO
+        self.config(bg=self.cores["bg_janela"])
+        
         self.banco = BancoDados()
         self.protocol("WM_DELETE_WINDOW", self.funcao_ao_fechar)
 
+        
         # Configurar grid para expandir
         for i in range(7):
             self.grid_rowconfigure(i, weight=1)
@@ -26,11 +31,16 @@ class Calculadora(tkinter.Tk):
             'numero': self.clicar_numero,
             'operacao': self.clicar_operacao,
             'especial': self.caracteres_especiais
-        })
+            
+        }, self.cores)
         
         self.entrada = self.interface.criar_entrada()
         self.entrada.config(textvariable=self.referenciado_entry)
         self.interface.criar_todos_botoes()
+        
+        #Atalhos para deletar tudo com DELETE e mostrar o resultado da operacao com ENTER
+        self.entrada.bind("<Return>", lambda e: self.atalho_calcular())
+        self.entrada.bind("<Delete>", lambda e: self.atalho_limpar())
         
         # Botão de histórico
         botao_historico = tkinter.Button(
@@ -40,7 +50,17 @@ class Calculadora(tkinter.Tk):
             font=("Arial", 12, "bold"),
             bg="lightblue"
         )
-        botao_historico.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+        botao_historico.grid(row=0, column=0, ipadx=10, ipady=10, padx=5, pady=5, sticky="nsew")
+        
+        # Botão tema
+        botao_tema = tkinter.Button(
+            self,
+            text="🌙",
+            command=self.alternar_tema,
+            font=("Arial", 12)
+        )
+        botao_tema.grid(row=0, column=5, ipadx=10, ipady=10, padx=5, pady=5, sticky="nsew")
+    
     
     def funcao_ao_fechar(self):
         self.banco.fechar()
@@ -97,12 +117,18 @@ class Calculadora(tkinter.Tk):
         # Se o frame NÃO foi criado ainda
         if not hasattr(self, 'frame_historico'):
             # Cria o frame
-            self.frame_historico = tkinter.Frame(self, bg="lightgray", width=200)
+            self.frame_historico = tkinter.Frame(self, bg="lightgray", width=400)
+            self.frame_historico.place(x=0, y=50, width=400, height=500)
             
+            # Cria scrollbar
+            scrollbar = tkinter.Scrollbar(self.frame_historico)
+            scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+
             
             # Cria a listbox dentro do frame
-            self.listbox = tkinter.Listbox(self.frame_historico, font=("Arial", 10))
-            self.listbox.pack(fill=tkinter.BOTH, expand=True, padx=5, pady=5)
+            self.listbox = tkinter.Listbox(self.frame_historico, font=("Arial", 8, "bold"),yscrollcommand=scrollbar.set, width=400)
+            self.listbox.pack(fill=tkinter.BOTH, expand=True, padx=4, pady=4)
+            scrollbar.config(command=self.listbox.yview)
             
             # Botão para limpar histórico
             botao_limpar = tkinter.Button(
@@ -170,5 +196,21 @@ class Calculadora(tkinter.Tk):
             
         mover()
         
-    
+    def alternar_tema(self):
+        if self.tema_atual == "claro":
+            self.tema_atual = "escuro"
+            self.cores = config.TEMA_ESCURO
+        else:
+            self.tema_atual = "claro"
+            self.cores = config.TEMA_CLARO
+        
+        # Atualiza as cores
+        self.config(bg=self.cores["bg_janela"])
+        self.entrada.config(bg=self.cores["bg_entrada"], fg=self.cores["fg_entrada"])
+    def atalho_calcular(self):
+        """Atalho Enter para calcular"""
+        self.clicar_operacao("=")
 
+    def atalho_limpar(self):
+        """Atalho Delete para limpar"""
+        self.caracteres_especiais("C")

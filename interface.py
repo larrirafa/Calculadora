@@ -2,13 +2,14 @@ import tkinter
 import config
 
 class Interface:
-    def __init__(self, parent, callbacks):
+    def __init__(self, parent, callbacks, cores):
         self.parent = parent
         self.callbacks = callbacks
+        self.cores = cores
         
     def criar_entrada(self):
-        entrada = tkinter.Entry(self.parent, width=10, font=config.FONTE_ENTRADA, justify="center")
-        entrada.grid(row=1, columnspan=3, ipadx=5, ipady=5, sticky="nsew")
+        entrada = tkinter.Entry(self.parent, width=1, font=config.FONTE_ENTRADA, justify="center")
+        entrada.grid(row=1, column=1, columnspan=2, padx=20, pady=10, sticky="nsew")
 
         return entrada
     
@@ -34,12 +35,19 @@ class Interface:
                 width=8,
                 height=3,
                 bd=5, 
-                relief="ridge"
+                relief="ridge",
+                bg=self.cores["bg_botao"],  # ← Adiciona
+                fg=self.cores["fg_botao"]
             )
+            # Cria variáveis pra armazenar a cor original
+            cor_original = self.cores["bg_botao"]
+            cor_hover = self.clarear_cor(cor_original)
+            
             btn.grid(row=row, column=col, padx=0.5, pady=0.5, sticky="nsew")
-            btn.bind("<Enter>", lambda e, b=btn: b.config(bg="lightgray"))
-            btn.bind("<Leave>", lambda e, b=btn: b.config(bg="SystemButtonFace"))
-
+            btn.bind("<Enter>", lambda e, b=btn, c=cor_hover: b.config(bg=c))
+            btn.bind("<Leave>", lambda e, b=btn, c=cor_original: b.config(bg=c))
+            
+            
     def criar_botoes_operacoes(self):
         for operacao, row, col, cor in config.BOTOES_OPERACOES:
             btn = tkinter.Button(
@@ -56,9 +64,13 @@ class Interface:
                 foreground="lightgray"
             )
 
-            btn.grid(row=row, column=col, padx=config.PADDING, pady=config.PADDING, sticky="nsew")
-            btn.bind("<Enter>", lambda e, b=btn, c=cor: b.config(bg=self.clarear_cor(c)))
-            btn.bind("<Leave>", lambda e, b=btn, c=cor: b.config(bg=c))
+
+            cor_original = cor
+            cor_hover = self.clarear_cor(cor_original)
+            
+            btn.grid(row=row, column=col, padx=0.5, pady=0.5, sticky="nsew")
+            btn.bind("<Enter>", lambda e, b=btn, c=cor_hover: b.config(bg=c))
+            btn.bind("<Leave>", lambda e, b=btn, c=cor_original: b.config(bg=c))
 
             
     def criar_botoes_especiais(self):
@@ -75,9 +87,13 @@ class Interface:
                 bd=3, 
                 relief="ridge" # Estilo da borda
             )
-            btn.grid(row=row, column=col, padx=config.PADDING, pady=config.PADDING, sticky="nsew")
-            btn.bind("<Enter>", lambda e, b=btn, c=cor: b.config(bg=self.clarear_cor(c)))  # ✅ Aqui
-            btn.bind("<Leave>", lambda e, b=btn, c=cor: b.config(bg=c))
+            
+            cor_original = cor
+            cor_hover = self.clarear_cor(cor_original)
+            
+            btn.grid(row=row, column=col, padx=0.5, pady=0.5, sticky="nsew")
+            btn.bind("<Enter>", lambda e, b=btn, c=cor_hover: b.config(bg=c))
+            btn.bind("<Leave>", lambda e, b=btn, c=cor_original: b.config(bg=c))
 
     def criar_todos_botoes(self):
         self.criar_botoes_numeros()
