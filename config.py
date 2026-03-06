@@ -1,6 +1,6 @@
 import config
 
-TITULO = "Calculadora LARRI"
+TITULO = "Calculadora"
 LARGURA = 400
 ALTURA = 500
 POS_X = 700
