@@ -21,7 +21,7 @@ Uma calculadora moderna e elegante com interface escura, histórico de cálculos
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/Calculadora.git
+git clone https://github.com/larrirafa/Calculadora.git
 cd Calculadora
 ```
 
