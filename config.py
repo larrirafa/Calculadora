@@ -16,41 +16,44 @@ BOTOES_NUMEROS = [
 
 # Botões de operações
 BOTOES_OPERACOES = [
-    ("=", 4, 5, "green"),
-    ("+", 3, 5, "orange"),
-    ("-", 2, 5, "orange"),
-    ("x", 1, 5, "orange"),
-    ("/", 5, 5, "orange")
+    ("=", 4, 5, "#c084fc"),
+    ("+", 3, 5, "#c084fc"),
+    ("-", 2, 5, "#c084fc"),
+    ("x", 1, 5, "#c084fc"),
+    ("/", 5, 5, "#c084fc")
 ]
 
 # Botões especiais
 BOTOES_ESPECIAIS = [
-    ("C", 5, 1, "red"),
-    ("%", 5, 3, "blue"),
-    ("back", 1, 3, "gray")
+    ("C", 5, 1, "#FF0000"),
+    ("%", 5, 3, "#0000FF"),
+    ("back", 1, 3, "#A9A9A9")
 ]
 
 PADDING = 5
 
 # Fonte da entrada
-FONTE_ENTRADA = ("Arial", 24, "bold")
+FONTE_ENTRADA = ("Segoe UI", 24, "bold")
+FONTE_BOTAO = ("Segoe UI", 14, "bold")
 
 
 # Temas
 TEMA_CLARO = {
-    "bg_janela": "white",
-    "bg_entrada": "white",
-    "fg_entrada": "black",
-    "bg_botao": "lightgray",
-    "fg_botao": "black",
-    "bg_frame": "lightgray"
+    "bg_janela": "#f5f5f5",
+    "bg_entrada": "#ece9e9",
+    "fg_entrada": "#1a1a1a",
+    "bg_botao": "#e0e0e0",
+    "fg_botao": "#1a1a1a",
+    "bg_frame": "#ffffff",
+    "cor_destaque": "#8b5cf6"  # Roxo
 }
 
 TEMA_ESCURO = {
-    "bg_janela": "#1e1e1e",
-    "bg_entrada": "#2d2d2d",
-    "fg_entrada": "white",
-    "bg_botao": "#3d3d3d",
-    "fg_botao": "white",
-    "bg_frame": "#2d2d2d"
+    "bg_janela": "#0f0f1e",      # Preto azulado
+    "bg_entrada": "#1a1a2e",     # Cinza escuro
+    "fg_entrada": "#e0e0e0",     # Branco suave
+    "bg_botao": "#16213e",       # Azul escuro
+    "fg_botao": "#c084fc",       # Roxo claro
+    "bg_frame": "#0f0f1e",
+    "cor_destaque": "#c084fc"    # Roxo/Rosa
 }
